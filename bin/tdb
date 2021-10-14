@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+get_php() {
+  local php=$(which php 2>/dev/null)
+  if [[ -z $php ]]; then
+    php=$(which php7 2>/dev/null)
+  fi
+  if [[ -z $php ]]; then
+    php=$(which php8 2>/dev/null)
+  fi
+  if [[ -z $php ]]; then
+    >&2 echo 'php is not installed'
+    exit 1
+  fi
+  echo $php
+}
+
+cmd=("$(get_php)" "${0%/*}/php/tdb.php")
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  cmd+=("${i//\"/\\\"}")
+done
+"${cmd[@]}"

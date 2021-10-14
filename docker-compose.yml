@@ -1,0 +1,220 @@
+version: "3.7"
+services:
+  pgsql12:
+    image: postgres:12.1
+    container_name: totara_docker_pgsql12
+    environment:
+      - TZ=Pacific/Auckland
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - pgsql12-socket:/run/postgresql/
+      - ../db/pgsql12/:/var/lib/postgresql/data/
+      - ./pgsql12/postgres.conf:/etc/postgresql/postgresql.conf:ro
+      - ./db/pgsql/:/scripts/:ro
+      - ./db/init.sh:/docker-entrypoint-initdb.d/initotara.sh:ro
+
+  mysql8:
+    image: mysql:8.0
+    container_name: totara_docker_mysql8
+    environment:
+      - TZ=Pacific/Auckland
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - mysql8-socket:/run/mysqld/
+      - ../db/mysql8:/var/lib/mysql
+      - ./mysql8/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
+      - ./db/mysql/:/scripts/:ro
+      - ./db/init.sh:/docker-entrypoint-initdb.d/initotara.sh:ro
+
+  memcached:
+    build: memcached
+    container_name: totara_docker_memcached
+    volumes:
+      - memcached-socket:/run/memcached/
+
+  php-7.3:
+    build: php73
+    container_name: totara_docker_php73
+    environment:
+      - TZ=Pacific/Auckland
+    working_dir: /var/www/totara/src
+    volumes:
+      - ../src/:/var/www/totara/src/
+      - ../data/:/var/www/totara/data/
+      - php73-socket:/run/php7.3/
+      - pgsql12-socket:/run/pgsql12/
+      - mysql8-socket:/run/mysql8/
+      - memcached-socket:/run/memcached/
+      - ./bash_aliases.txt:/root/.bash_aliases:ro
+    networks:
+      - totara-docker
+
+  php-7.4:
+    build: php74
+    container_name: totara_docker_php74
+    environment:
+      - TZ=Pacific/Auckland
+    working_dir: /var/www/totara/src
+    volumes:
+      - ../src/:/var/www/totara/src/
+      - ../data/:/var/www/totara/data/
+      - php74-socket:/run/php7.4/
+      - pgsql12-socket:/run/pgsql12/
+      - mysql8-socket:/run/mysql8/
+      - memcached-socket:/run/memcached/
+      - ./bash_aliases.txt:/root/.bash_aliases:ro
+    networks:
+      - totara-docker
+
+  php-8.0:
+    build: php80
+    container_name: totara_docker_php80
+    environment:
+      - TZ=Pacific/Auckland
+    working_dir: /var/www/totara/src
+    volumes:
+      - ../src/:/var/www/totara/src/
+      - ../data/:/var/www/totara/data/
+      - php80-socket:/run/php8.0/
+      - pgsql12-socket:/run/pgsql12/
+      - mysql8-socket:/run/mysql8/
+      - memcached-socket:/run/memcached/
+      - ./bash_aliases.txt:/root/.bash_aliases:ro
+    networks:
+      - totara-docker
+
+  php-8.1:
+    build: php81
+    container_name: totara_docker_php81
+    environment:
+      - TZ=Pacific/Auckland
+    working_dir: /var/www/totara/src
+    volumes:
+      - ../src/:/var/www/totara/src/
+      - ../data/:/var/www/totara/data/
+      - php81-socket:/run/php8.1/
+      - pgsql12-socket:/run/pgsql12/
+      - mysql8-socket:/run/mysql8/
+      - memcached-socket:/run/memcached/
+      - ./bash_aliases.txt:/root/.bash_aliases:ro
+    networks:
+      - totara-docker
+
+  lighttpd:
+    build: lighttpd
+    container_name: totara_docker_lighttpd
+    ports:
+      - "80:80"
+    environment:
+      - TZ=Pacific/Auckland
+    volumes:
+      - ../src/:/var/www/totara/src/
+      - ../data/:/var/www/totara/data/
+      - php73-socket:/run/php7.3/
+      - php74-socket:/run/php7.4/
+      - php80-socket:/run/php8.0/
+      - php81-socket:/run/php8.1/
+    networks:
+      totara-docker:
+        aliases:
+          - totara
+          - totara73
+          - totara74
+          - totara80
+          - totara81
+          - behat.totara
+          - behat0.totara
+          - behat1.totara
+          - behat2.totara
+          - behat3.totara
+          - behat4.totara
+          - behat5.totara
+          - behat6.totara
+          - behat7.totara
+          - behat8.totara
+          - behat9.totara
+          - behat.totara73
+          - behat0.totara73
+          - behat1.totara73
+          - behat2.totara73
+          - behat3.totara73
+          - behat4.totara73
+          - behat5.totara73
+          - behat6.totara73
+          - behat7.totara73
+          - behat8.totara73
+          - behat9.totara73
+          - behat.totara74
+          - behat0.totara74
+          - behat1.totara74
+          - behat2.totara74
+          - behat3.totara74
+          - behat4.totara74
+          - behat5.totara74
+          - behat6.totara74
+          - behat7.totara74
+          - behat8.totara74
+          - behat9.totara74
+          - behat.totara80
+          - behat0.totara80
+          - behat1.totara80
+          - behat2.totara80
+          - behat3.totara80
+          - behat4.totara80
+          - behat5.totara80
+          - behat6.totara80
+          - behat7.totara80
+          - behat8.totara80
+          - behat9.totara80
+          - behat.totara81
+          - behat0.totara81
+          - behat1.totara81
+          - behat2.totara81
+          - behat3.totara81
+          - behat4.totara81
+          - behat5.totara81
+          - behat6.totara81
+          - behat7.totara81
+          - behat8.totara81
+          - behat9.totara81
+
+  selenium:
+    image: selenium/standalone-chrome:3.141.59-oxygen
+    container_name: totara_docker_selenium
+    shm_size: '1gb'
+    ports:
+      - "4445:4444"
+    environment:
+      - TZ=Pacific/Auckland
+    networks:
+      totara-docker:
+        aliases:
+          - selenium
+
+  selenium-debug:
+    image: selenium/standalone-chrome-debug:3.141.59-oxygen
+    container_name: totara_docker_selenium_debug
+    shm_size: '1gb'
+    ports:
+      - "5901:5900"
+      - "4446:4444"
+    environment:
+      - TZ=Pacific/Auckland
+    networks:
+      totara-docker:
+        aliases:
+          - selenium.debug
+
+volumes:
+  php73-socket:
+  php74-socket:
+  php80-socket:
+  php81-socket:
+  pgsql12-socket:
+  mysql8-socket:
+  memcached-socket:
+
+networks:
+  totara-docker:

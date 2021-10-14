@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cmd=("docker-compose" "-f" "${0%/*}/../docker-compose.yml")
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  cmd+=("${i//\"/\\\"}")
+done
+"${cmd[@]}"

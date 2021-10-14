@@ -1,0 +1,3 @@
+# restore dump taken by TotaraBox
+tdocker cp /path/to.dump mysql8:/tmp/backup.dump
+tdocker exec mysql8 /scripts/restore.sh database_name

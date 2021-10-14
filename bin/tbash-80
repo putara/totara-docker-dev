@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+"${0%/*}/tbash" php-8.0 /bin/bash

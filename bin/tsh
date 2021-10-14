@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+cmd=("${0%/*}/tdc" "exec")
+subdir="${PWD/\/var\/www\/totara\/src\//}"
+container=php-7.3
+if [[ -n "$1" ]]; then
+  container="$1"
+fi
+shell=/bin/sh
+if [[ -n "$2" ]]; then
+  shell="$2"
+fi
+if [[ $container =~ ^php && "$subdir" != "$PWD" ]]; then
+  cmd+=("-w" "/var/www/totara/src/$subdir")
+fi
+cmd+=($container $shell)
+"${cmd[@]}"

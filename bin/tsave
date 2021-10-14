@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cmd=("${0%/*}/tdb" "save")
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  cmd+=("${i//\"/\\\"}")
+done
+"${cmd[@]}"

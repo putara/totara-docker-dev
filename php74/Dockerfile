@@ -1,0 +1,8 @@
+FROM totara/docker-dev-php74
+
+COPY php.ini /usr/local/etc/php/
+COPY fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
+
+RUN echo 'source ~/.bash_aliases' >> ~/.bashrc && \
+    groupadd -g 1000 totara && \
+    useradd -g 1000 -u 1000 totara

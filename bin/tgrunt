@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cmd=("grunt")
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  cmd+=("${i//\"/\\\"}")
+done
+"${cmd[@]}"

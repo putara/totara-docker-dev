@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  docker-php-testing:
+    build: .
+    environment:
+      - TZ=Pacific/Auckland
+    volumes:
+      - ..:/code:ro

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+cmd=("${0%/*}/tdc" "exec")
+subdir="${PWD/\/var\/www\/totara\/src\//}"
+if [[ "$subdir" != "$PWD" ]]; then
+  cmd+=("-w" "/var/www/totara/src/$subdir")
+fi
+cmd+=("php-7.3" "php")
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  cmd+=("${i//\"/\\\"}")
+done
+"${cmd[@]}"

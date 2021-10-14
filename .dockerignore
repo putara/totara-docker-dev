@@ -1,0 +1,4 @@
+tests/vendor/
+tests/composer.lock
+tests/*.phar
+tests/*.cache

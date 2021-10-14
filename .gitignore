@@ -1,0 +1,6 @@
+_notes
+bash_aliases.txt
+tests/vendor/
+tests/composer.lock
+tests/*.phar
+tests/*.cache

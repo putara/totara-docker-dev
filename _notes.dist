@@ -1,0 +1,36 @@
+<?php
+// database host - see docker-compose.yml for applicable hosts
+$SITE_DB = 'pgsql12';
+// /var/www/totara/src/uno
+$SITE_DIR = 'uno';
+// production, trial, qa, demo, or development
+$SITE_TYPE = '';
+// learn, learn_perform_engage, etc.
+$SITE_FLAVOUR = 'learn';
+// e.g. 'totara.ngrok.io'
+$SITE_TUNNEL_HOST = '';
+$DB_NAME = 'totara1';
+// /var/www/totara/data/site/one
+$DATA_DIR = 'one';
+// selenium, selenium-debug, host IP address etc.
+$BEHAT_SELENIUM = 'selenium-debug';
+// 0 or 1 - 9
+$BEHAT_PARALLEL = 0;
+// enable developer mode: false or true
+$DEBUG_DEV = false;
+// debug legacy front end: false, true or 'brute'
+$DEBUG_JS = false;
+// debug TUI front end: false or true
+$DEBUG_TUI = false;
+// debug GQL: false, true or 'brute', use with $DEBUG_DEV
+$DEBUG_GQL = false;
+// enable mobile device emulator: false or true
+$DEBUG_MOBILE = false;
+// enable XState inspector: false or true
+$DEBUG_XSTATE = false;
+// enable PoC virtual meeting plugins: false or true
+$DEBUG_MEET = false;
+
+// any other raw configurations you wish to set
+// $CFG->debugusers = '2,5';
+// define('TOTARA_DISTRIBUTION_TEST', 1);

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+cmd=("${0%/*}/tdc" "up" "-d")
+if [[ "$#" -eq 0 ]]; then
+  cmd+=("pgsql12" "memcached" "php-7.3" "lighttpd" "selenium" "selenium-debug")
+elif [[ "$#" -ne 1 || "$1" != "all" ]]; then
+  for i in "$@"; do
+    i="${i//\\/\\\\}"
+    cmd+=("${i//\"/\\\"}")
+  done
+fi
+"${cmd[@]}"
